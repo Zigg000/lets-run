@@ -2,231 +2,280 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
 <title>Let's go Run!</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
 
 <style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  html, body { width: 100%; height: 100%; overflow: hidden; font-family: "Press Start 2P", cursive; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  font-family: "Press Start 2P", cursive;
+  touch-action: manipulation;
+}
 
-  /* GIF BACKGROUND */
-  body {
-    background: url('bg.gif') no-repeat center center fixed;
-    background-size: cover; /* fit sa kahit anong screen */
-  }
+/* BACKGROUND */
+body {
+  background: url('bg.gif') no-repeat center center fixed;
+  background-size: cover;
+}
 
-  .game { position: relative; width: 100vw; height: 100vh; overflow: hidden; }
+.game {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
 
-  /* PLAYER */
-  .player { position: absolute; left: 10%; bottom: 10%; width: 130px; transition: transform 0.05s linear; }
+/* PLAYER */
+.player {
+  position: absolute;
+  left: 10%;
+  bottom: 10%;
+  width: 130px;
+  transition: transform 0.05s linear;
+}
 
-  /* OBSTACLE */
-  .obstacle { position: absolute; bottom: 10%; width: 35px; left: 85%; }
+/* OBSTACLE */
+.obstacle {
+  position: absolute;
+  bottom: 10%;
+  width: 35px;
+  left: 85%;
+}
 
-  /* UI */
-  #startText { position: absolute; top: 40%; width: 100%; text-align: center; font-size: 3vw; color: #ff0066; animation: blink 1.5s infinite; }
-  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.4} }
-  #score { position: absolute; top: 20px; right: 30px; font-size: 18px; color: #ff0066;}
+/* UI */
+#startText {
+  position: absolute;
+  top: 40%;
+  width: 100%;
+  text-align: center;
+  font-size: 3vw;
+  color: #ff0066;
+  animation: blink 1.5s infinite;
+  pointer-events: none;
+}
+@keyframes blink {
+  0%,100% { opacity:1 }
+  50% { opacity:0.4 }
+}
 
-  /* SOUND TOGGLE */
-  #soundBtn { position: absolute; top: 20px; left: 20px; font-size: 18px; padding: 8px; background: rgba(0,0,0,0.4); color: white; border-radius: 8px; cursor: pointer; user-select: none; }
+#score {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  font-size: 18px;
+  color: #ff0066;
+}
 
-  /* GAME OVER */
-  #gameOver { position: fixed; inset: 0; background: rgba(0,0,0,0.85); color: white; display: none; justify-content: center; align-items: center; flex-direction: column; gap: 20px; text-align: center; }
-  #restart { padding: 16px 30px; font-size: 16px; font-family:"Press Start 2P", cursive; cursor: pointer; background: #ff69b4; border: none; border-radius: 10px; color: white; }
+/* SOUND BUTTON */
+#soundBtn {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  font-size: 20px;
+  padding: 10px;
+  background: rgba(0,0,0,0.5);
+  color: white;
+  border-radius: 10px;
+  cursor: pointer;
+  z-index: 999;
+}
 
-  /* FLOATING GIFS */
-  .floating { position: absolute; pointer-events: none; }
-  .cloudGif { width: 150px; opacity: 0.9; }
-  .birdGif { width: 120px; }
-  .butterflyGif { width: 120px; }
-  .beeGif { width: 120px; }
+/* GAME OVER */
+#gameOver {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.85);
+  color: white;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 20px;
+  text-align: center;
+  z-index: 1000;
+}
+
+#restart {
+  padding: 16px 30px;
+  font-size: 16px;
+  font-family:"Press Start 2P", cursive;
+  cursor: pointer;
+  background: #ff69b4;
+  border: none;
+  border-radius: 10px;
+  color: white;
+}
+
+/* FLOATING GIFS */
+.floating { position: absolute; pointer-events: none; }
+.cloudGif { width: 150px; }
+.birdGif { width: 120px; }
+.butterflyGif { width: 120px; }
+.beeGif { width: 120px; }
 </style>
 </head>
 
 <body>
-  <div class="game" id="game">
-    <div id="soundBtn">🔊</div>
+<div class="game" id="game">
+  <div id="soundBtn">🔊</div>
 
-    <img src="player.gif" class="player" id="player" />
-    <img src="obstacle.png" class="obstacle" id="obstacle" />
+  <img src="player.gif" class="player" id="player" />
+  <img src="obstacle.png" class="obstacle" id="obstacle" />
 
-    <div id="startText">SPACE / TAP TO JUMP 🎮</div>
-    <div id="score">0</div>
-  </div>
+  <div id="startText">SPACE / TAP TO JUMP 🎮</div>
+  <div id="score">0</div>
+</div>
 
-  <div id="gameOver">
-    <div>GAME OVER ⚠️</div>
-    <div id="finalScore"></div>
-    <button id="restart">PLAY AGAIN</button>
-  </div>
+<div id="gameOver">
+  <div>GAME OVER ⚠️</div>
+  <div id="finalScore"></div>
+  <button id="restart">PLAY AGAIN</button>
+</div>
 
-  <!-- AUDIO -->
-  <audio id="jumpSound" src="jump.wav"></audio>
-  <audio id="gameOverSound" src="gameover.wav"></audio>
-  <audio id="bgm" src="bgm.mp3" loop></audio>
+<!-- AUDIO -->
+<audio id="jumpSound" src="jump.wav" preload="auto"></audio>
+<audio id="gameOverSound" src="gameover.wav" preload="auto"></audio>
+<audio id="bgm" src="bgm.mp3" loop preload="auto"></audio>
 
-  <script>
-    const game = document.getElementById("game");
-    const player = document.getElementById("player");
-    const obstacle = document.getElementById("obstacle");
-    const scoreText = document.getElementById("score");
-    const startText = document.getElementById("startText");
-    const gameOverScreen = document.getElementById("gameOver");
-    const finalScore = document.getElementById("finalScore");
-    const restartBtn = document.getElementById("restart");
-    const soundBtn = document.getElementById("soundBtn");
+<script>
+const game = document.getElementById("game");
+const player = document.getElementById("player");
+const obstacle = document.getElementById("obstacle");
+const scoreText = document.getElementById("score");
+const startText = document.getElementById("startText");
+const gameOverScreen = document.getElementById("gameOver");
+const finalScore = document.getElementById("finalScore");
+const restartBtn = document.getElementById("restart");
+const soundBtn = document.getElementById("soundBtn");
 
-    const jumpSound = document.getElementById("jumpSound");
-    const gameOverSound = document.getElementById("gameOverSound");
-    const bgm = document.getElementById("bgm");
+const jumpSound = document.getElementById("jumpSound");
+const gameOverSound = document.getElementById("gameOverSound");
+const bgm = document.getElementById("bgm");
 
-    /* STATE */
-    let soundOn = true;
-    let running = false;
-    let isGameOver = false;
-    let score = 0;
-    let y = 0;
-    let velocity = 0;
-    let obstacleX = window.innerWidth;
-    let speed = 4;
+let soundOn = true;
+let running = false;
+let isGameOver = false;
+let score = 0;
+let y = 0;
+let velocity = 0;
+let obstacleX = window.innerWidth;
+let speed = 4;
 
-    /* AUTO SPEED INCREASE */
-    let speedInterval = null;
+/* 🔓 MOBILE AUDIO UNLOCK */
+let audioUnlocked = false;
+function unlockAudio() {
+  if (audioUnlocked) return;
+  [bgm, jumpSound, gameOverSound].forEach(a => {
+    a.play().then(() => a.pause()).catch(()=>{});
+  });
+  audioUnlocked = true;
+}
 
-    /* DYNAMIC OBSTACLE */
-    const minDistance = 200;
-    const maxDistance = 500;
-    let nextObstacleDistance = Math.random() * (maxDistance - minDistance) + minDistance;
+/* SOUND TOGGLE */
+soundBtn.addEventListener("click", () => {
+  unlockAudio();
+  soundOn = !soundOn;
+  soundBtn.textContent = soundOn ? "🔊" : "🔇";
+  if (soundOn && running) bgm.play();
+  else bgm.pause();
+});
 
-    /* FLOATING GIFS */
-    const floatingGifs = [
-      { src: "cloud.gif", class: "cloudGif", speed: 0.4 },
-      { src: "bird.gif", class: "birdGif", speed: 0.9 },
-      { src: "butterfly.gif", class: "butterflyGif", speed: 0.7 },
-      { src: "bee.gif", class: "beeGif", speed: 1.1 },
-    ];
-    let spawnGifsInterval = null;
+/* GAME LOOP */
+function gameLoop() {
+  if (!running) return;
 
-    function spawnFloating() {
-      if (!running) return;
+  velocity += -0.8;
+  y += velocity;
+  if (y < 0) { y = 0; velocity = 0; }
+  player.style.transform = `translateY(${-y}px)`;
 
-      const f = floatingGifs[Math.floor(Math.random() * floatingGifs.length)];
-      const img = document.createElement("img");
-      img.src = f.src;
-      img.className = `floating ${f.class}`;
-      img.style.top = Math.random() * 50 + 5 + "vh";
-      img.style.left = "100%";
-      game.appendChild(img);
+  obstacleX -= speed;
+  obstacle.style.left = obstacleX + "px";
 
-      let x = window.innerWidth;
-      function move() {
-        if (!img.parentNode) return;
-        x -= f.speed;
-        img.style.transform = `translateX(${x - window.innerWidth}px)`;
-        if (x < -200) img.remove();
-        else requestAnimationFrame(move);
-      }
-      requestAnimationFrame(move);
+  if (obstacleX < -100) {
+    score++;
+    scoreText.textContent = score;
+    obstacleX = window.innerWidth + 300;
+    if (score % 3 === 0) speed += 0.4;
+  }
+
+  const p = player.getBoundingClientRect();
+  const o = obstacle.getBoundingClientRect();
+  if (p.right > o.left && p.left < o.right && p.bottom > o.top && p.top < o.bottom) {
+    endGame();
+    return;
+  }
+
+  requestAnimationFrame(gameLoop);
+}
+
+/* START */
+function startGame() {
+  unlockAudio();
+  running = true;
+  isGameOver = false;
+  score = 0;
+  speed = 4;
+  y = 0;
+  velocity = 0;
+  obstacleX = window.innerWidth;
+  scoreText.textContent = score;
+  startText.style.display = "none";
+  gameOverScreen.style.display = "none";
+
+  if (soundOn) {
+    bgm.currentTime = 0;
+    bgm.play();
+  }
+
+  requestAnimationFrame(gameLoop);
+}
+
+/* END */
+function endGame() {
+  running = false;
+  isGameOver = true;
+  bgm.pause();
+  if (soundOn) {
+    gameOverSound.currentTime = 0;
+    gameOverSound.play();
+  }
+  finalScore.textContent = "Score: " + score;
+  gameOverScreen.style.display = "flex";
+}
+
+/* JUMP */
+function jump() {
+  unlockAudio();
+  if (isGameOver) return;
+  if (!running) startGame();
+  if (y === 0) {
+    velocity = 18;
+    if (soundOn) {
+      jumpSound.currentTime = 0;
+      jumpSound.play();
     }
+  }
+}
 
-    /* SOUND TOGGLE */
-    soundBtn.onclick = () => {
-      soundOn = !soundOn;
-      soundBtn.textContent = soundOn ? "🔊" : "🔇";
-      if (soundOn && running) bgm.play();
-      else bgm.pause();
-    };
+/* CONTROLS */
+document.addEventListener("keydown", e => {
+  if (e.code === "Space") jump();
+});
 
-    /* GAME LOOP */
-    function gameLoop() {
-      if (!running) return;
+game.addEventListener("touchstart", e => {
+  jump();
+});
 
-      velocity += -0.8;
-      y += velocity;
-      if (y < 0) { y = 0; velocity = 0; }
-      player.style.transform = `translateY(${-y}px)`;
-
-      obstacleX -= speed;
-      obstacle.style.left = obstacleX + "px";
-
-      if (obstacleX < -100) {
-        score++;
-        scoreText.textContent = score;
-        nextObstacleDistance = Math.random() * (maxDistance - minDistance) + minDistance;
-        obstacleX = window.innerWidth + nextObstacleDistance;
-        if (score % 3 === 0) speed += 0.4;
-      }
-
-      /* COLLISION */
-      const p = player.getBoundingClientRect();
-      const o = obstacle.getBoundingClientRect();
-      const toleranceX = 20;
-      const toleranceY = 15;
-      const horizontalOverlap = p.right - toleranceX > o.left && p.left + toleranceX < o.right;
-      const verticalOverlap = p.bottom - toleranceY > o.top && p.top + toleranceY < o.bottom;
-      if (horizontalOverlap && verticalOverlap) { endGame(); return; }
-
-      requestAnimationFrame(gameLoop);
-    }
-
-    /* START GAME */
-    function startGame() {
-      running = true;
-      isGameOver = false;
-      score = 0;
-      speed = 4;
-      y = 0;
-      velocity = 0;
-      nextObstacleDistance = Math.random() * (maxDistance - minDistance) + minDistance;
-      obstacleX = window.innerWidth / 3 + nextObstacleDistance;
-      obstacle.style.left = obstacleX + "px";
-      player.style.transform = "translateY(0)";
-      scoreText.textContent = score;
-      startText.style.display = "none";
-      gameOverScreen.style.display = "none";
-
-      if (soundOn) { bgm.currentTime = 0; bgm.play(); }
-
-      // Clear old floating gifs and restart spawning
-      document.querySelectorAll(".floating").forEach(gif => gif.remove());
-      if (spawnGifsInterval) clearInterval(spawnGifsInterval);
-      spawnGifsInterval = setInterval(spawnFloating, 2200);
-
-      // SPEED INCREASE EVERY 30 SECONDS
-      if (speedInterval) clearInterval(speedInterval);
-      speedInterval = setInterval(() => { speed += 1; }, 30000);
-
-      requestAnimationFrame(gameLoop);
-    }
-
-    /* END GAME */
-    function endGame() {
-      running = false;
-      isGameOver = true;
-      bgm.pause();
-      if (soundOn){ gameOverSound.currentTime = 0; gameOverSound.play(); }
-      finalScore.textContent = "Score: " + score;
-      gameOverScreen.style.display = "flex";
-      if (spawnGifsInterval) { clearInterval(spawnGifsInterval); spawnGifsInterval = null; }
-      if (speedInterval) { clearInterval(speedInterval); speedInterval = null; }
-    }
-
-    /* JUMP */
-    function jump() {
-      if (isGameOver) return;
-      if (!running) startGame();
-      if (y === 0) { velocity = 18; if (soundOn){ jumpSound.currentTime=0; jumpSound.play(); } }
-    }
-
-    /* CONTROLS */
-    document.addEventListener("keydown", e => { if(e.code==="Space") jump(); });
-    document.addEventListener("touchstart", e => { e.preventDefault(); jump(); }, { passive: false });
-
-    /* PLAY AGAIN BUTTON */
-    restartBtn.onclick = () => { startGame(); };
-  </script>
+/* RESTART */
+restartBtn.addEventListener("click", () => {
+  startGame();
+});
+</script>
 </body>
 </html>
