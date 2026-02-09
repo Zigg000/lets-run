@@ -83,7 +83,7 @@ let score = 0;
 let y = 0;
 let velocity = 0;
 let obstacleX = window.innerWidth;
-let speed = 3;
+let speed = 4;
 
 /* AUTO SPEED INCREASE */
 let speedInterval = null;
@@ -172,7 +172,7 @@ function startGame() {
   y = 0;
   velocity = 0;
   nextObstacleDistance = Math.random() * (maxDistance - minDistance) + minDistance;
-  obstacleX = window.innerWidth / 3 + nextObstacleDistance;
+  obstacleX = window.innerWidth / 1.5 + nextObstacleDistance;
   obstacle.style.left = obstacleX + "px";
   player.style.transform = "translateY(0)";
   scoreText.textContent = score;
@@ -220,6 +220,3 @@ restartBtn.addEventListener("click", startGame);
 </script>
 </body>
 </html>
-
-
-
